@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import Axios from 'axios';
-
-import {API_BASEURL} from 'react-native-dotenv';
+import firebaseSDK from '../../Configs/firebaseSDK';
 
 import {
   StyleSheet,
@@ -14,34 +12,35 @@ import {
   Form,
 } from 'react-native';
 
-import {Item, Input, Header, Button, Text, View} from 'native-base';
+import {Item, Input, Header, Button, Text, View, Spinner} from 'native-base';
 
 import Bg from '../../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const Height = Dimensions.get('window').height;
 const Login = ({navigation}) => {
+  const [Name, setName] = useState('Test');
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
+  const [Avatar, setAvatar] = useState('');
 
-  // async function submitLogin() {
-  //   try {
-  //     const loginResult = await Axios.post(API_BASEURL + '/api/v1/login', {
-  //       email: Email,
-  //       password: Password,
-  //     });
-  //     if (loginResult.status === 200) {
-  //       AsyncStorage.setItem('keyToken', `Bearer: ${loginResult.data.token}`);
-  //       ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
-  //       return navigation.replace('Home');
-  //     }
-  //   } catch (error) {
-  //     ToastAndroid.show(
-  //       'Login Failed! Email/Password is invalid!',
-  //       ToastAndroid.SHORT,
-  //     );
-  //   }
-  // }
+  const submitLogin = async () => {
+    const user = {Email, Password};
+    const response = await firebaseSDK.login(user, loginSuccess, loginFailed);
+  };
+
+  const loginSuccess = () => {
+    ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
+    navigation.replace('Home', {
+      name: Name,
+      email: Email,
+      avatar: Avatar,
+    });
+  };
+
+  const loginFailed = () => {
+    ToastAndroid.show('Login Failed!', ToastAndroid.LONG);
+  };
 
   return (
     <View>
@@ -110,9 +109,7 @@ const Login = ({navigation}) => {
                   />
                 </Item>
               </View>
-              <Button
-                style={styles.ButtonLogin}
-                onPress={() => navigation.navigate('Home')}>
+              <Button style={styles.ButtonLogin} onPress={() => submitLogin()}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>LOGIN</Text>
               </Button>
             </View>

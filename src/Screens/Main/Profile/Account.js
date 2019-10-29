@@ -29,7 +29,11 @@ const Account = ({navigation}) => {
           </View>
           <View style={{flex: 1}}>
             <Body style={styles.RightTitle}>
-              <Title>Logout</Title>
+              <Icon
+                name="md-exit"
+                style={{color: 'white'}}
+                onPress={() => navigation.replace('Login')}
+              />
             </Body>
           </View>
         </View>

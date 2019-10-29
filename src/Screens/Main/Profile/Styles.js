@@ -20,6 +20,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginRight: 15,
   },
+  Profile: {
+    paddingLeft: 20,
+    paddingBottom: 20,
+    borderBottomWidth: 0.3,
+    borderBottomColor: 'gray',
+  },
 });
 
 export default styles;

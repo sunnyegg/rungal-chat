@@ -38,6 +38,8 @@ const TabNavigator = createBottomTabNavigator(
         backgroundColor: '#23272a',
         borderTopColor: '#23272a',
         height: 55,
+        paddingBottom: 8,
+        paddingTop: 8,
       },
     },
   },

@@ -15,6 +15,8 @@ import {
   Icon,
   Title,
 } from 'native-base';
+import Avatar from '../../../Assets/Img/aqua.jpg';
+import {ScrollView} from 'react-native-gesture-handler';
 import styles from './Styles';
 
 const FriendList = ({navigation}) => {
@@ -24,37 +26,48 @@ const FriendList = ({navigation}) => {
         <View style={styles.HeaderTitle}>
           <View style={{flex: 1}}>
             <Body style={styles.LeftTitle}>
-              <Title>Friend List</Title>
+              <Title>Friends</Title>
             </Body>
           </View>
           <View style={{flex: 1}}>
             <Body style={styles.RightTitle}>
-              <Title>Search</Title>
+              <Icon
+                name="md-search"
+                style={{color: 'white'}}
+                onPress={() => alert('Apa lo')}
+              />
             </Body>
           </View>
         </View>
       </View>
-
-      <Container>
-        <Content>
-          <List>
-            <ListItem avatar>
-              <Left>
-                <Thumbnail source={{uri: 'Image URL'}} />
-              </Left>
-              <Body>
-                <Text>Group</Text>
+      <ScrollView style={{backgroundColor: '#2c2f33', paddingTop: 10}}>
+        <List style={{marginLeft: -10}}>
+          <ListItem avatar onPress={() => navigation.navigate('FriendProfile')}>
+            <Body
+              style={{
+                borderBottomColor: '#4f555c',
+                flex: 1,
+                flexDirection: 'row',
+              }}>
+              <View style={{flex: 1}}>
+                <Thumbnail source={Avatar} />
+              </View>
+              <View style={{flex: 4}}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                  }}>
+                  Aqua
+                </Text>
                 <Text note>
                   Doing what you like will always keep you happy . .
                 </Text>
-              </Body>
-              <Right>
-                <Text note>3:43 pm</Text>
-              </Right>
-            </ListItem>
-          </List>
-        </Content>
-      </Container>
+              </View>
+            </Body>
+          </ListItem>
+        </List>
+      </ScrollView>
     </>
   );
 };

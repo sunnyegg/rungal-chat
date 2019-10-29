@@ -21,28 +21,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const Height = Dimensions.get('window').height;
 const Register = ({navigation}) => {
-  const [Username, setUsername] = useState('');
+  const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
-
-  // async function submitLogin() {
-  //   try {
-  //     const loginResult = await Axios.post(API_BASEURL + '/api/v1/login', {
-  //       email: Email,
-  //       password: Password,
-  //     });
-  //     if (loginResult.status === 200) {
-  //       AsyncStorage.setItem('keyToken', `Bearer: ${loginResult.data.token}`);
-  //       ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
-  //       return navigation.replace('Home');
-  //     }
-  //   } catch (error) {
-  //     ToastAndroid.show(
-  //       'Login Failed! Email/Password is invalid!',
-  //       ToastAndroid.SHORT,
-  //     );
-  //   }
-  // }
 
   return (
     <View>
@@ -87,8 +68,8 @@ const Register = ({navigation}) => {
                     style={{color: 'white'}}
                     placeholder="Username"
                     placeholderTextColor="white"
-                    onChangeText={text => setUsername(text)}
-                    value={Username}
+                    onChangeText={text => setName(text)}
+                    value={Name}
                   />
                 </Item>
                 <Item style={styles.InputStyle} last>

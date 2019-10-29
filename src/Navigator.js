@@ -7,6 +7,7 @@ import Login from './Screens/Users/Login';
 import Register from './Screens/Users/Register';
 import Home from './Screens/Main/Home';
 import PersonalConversation from './Screens/Main/Chats/Conversations/Personal';
+import FriendProfile from './Screens/Main/Profile/Friend';
 
 const MainNavigator = createStackNavigator(
   {
@@ -15,10 +16,11 @@ const MainNavigator = createStackNavigator(
     Register,
     Home,
     PersonalConversation,
+    FriendProfile,
   },
   {
     headerMode: 'none',
-    initialRouteName: 'Open',
+    initialRouteName: 'Home',
     transitionConfig: () => fromRight(500),
   },
 );
