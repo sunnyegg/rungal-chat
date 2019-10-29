@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StatusBar} from 'react-native';
 import {
   Container,
   Header,
@@ -22,10 +22,10 @@ import styles from './Styles';
 import Avatar from '../../../Assets/Img/aqua.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
 import {GiftedChat} from 'react-native-gifted-chat';
-
 const PersonalList = ({navigation}) => {
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
+      <StatusBar backgroundColor="#23272a" />
       <View style={styles.Header}>
         <View style={styles.HeaderTitle}>
           <View style={{flex: 1}}>

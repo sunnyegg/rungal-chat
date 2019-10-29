@@ -14,13 +14,13 @@ class FirebaseSDK {
       });
     }
   }
-  login = async (user, success_callback, failed_callback) => {
+  login = async (user, success, failed) => {
     await firebase
       .auth()
       .signInWithEmailAndPassword(user.Email, user.Password)
-      .then(success_callback, failed_callback);
+      .then(success, failed);
   };
-  signup = async user => {
+  register = async user => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(user.Email, user.Password)
@@ -37,11 +37,6 @@ class FirebaseSDK {
             function() {
               console.log(
                 'Updated displayName successfully. name:' + user.Name,
-              );
-              alert(
-                'User ' +
-                  user.Name +
-                  ' was created successfully. Please login.',
               );
             },
             function(error) {

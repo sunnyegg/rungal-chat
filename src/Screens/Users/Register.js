@@ -1,7 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import Axios from 'axios';
-
-import {API_BASEURL} from 'react-native-dotenv';
 
 import {
   StyleSheet,
@@ -18,12 +15,25 @@ import {Item, Input, Header, Button, Text, View} from 'native-base';
 
 import Bg from '../../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
+import firebaseSDK from '../../Configs/firebaseSDK';
 
 const Height = Dimensions.get('window').height;
 const Register = ({navigation}) => {
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
+
+  const register = async () => {
+    try {
+      const user = {Email, Password, Name};
+      const response = await firebaseSDK.register(user);
+      ToastAndroid.show('Register Success!', ToastAndroid.LONG);
+      navigation.replace('Login');
+    } catch ({message}) {
+      ToastAndroid.show('Register Failed!', ToastAndroid.LONG);
+      console.log('create account failed. catch error:' + message);
+    }
+  };
 
   return (
     <View>
@@ -66,7 +76,7 @@ const Register = ({navigation}) => {
                 <Item style={styles.InputStyle} last>
                   <Input
                     style={{color: 'white'}}
-                    placeholder="Username"
+                    placeholder="Name"
                     placeholderTextColor="white"
                     onChangeText={text => setName(text)}
                     value={Name}
@@ -92,9 +102,7 @@ const Register = ({navigation}) => {
                   />
                 </Item>
               </View>
-              <Button
-                style={styles.ButtonLogin}
-                onPress={() => navigation.navigate('Login')}>
+              <Button style={styles.ButtonLogin} onPress={() => register()}>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>Register</Text>
               </Button>
             </View>
