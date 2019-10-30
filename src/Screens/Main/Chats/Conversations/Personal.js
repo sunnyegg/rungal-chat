@@ -8,10 +8,17 @@ import firebaseSDK from '../../../../Configs/firebaseSDK';
 
 const PersonalConversation = ({navigation}) => {
   const [Messages, setMessages] = useState([]);
+  const [UserID, setUserID] = useState('');
+  const [Name, setName] = useState('');
 
-  // useEffect(() => {
-  //   console.log({Messages});
-  // }, []);
+  const setData = () => {
+    setUserID(navigation.getParam('userID'));
+    setName(navigation.getParam('userName'));
+  };
+
+  useEffect(() => {
+    setData();
+  }, []);
 
   const onSend = text => {
     setMessages(() => GiftedChat.append(Messages, text));
@@ -35,7 +42,7 @@ const PersonalConversation = ({navigation}) => {
                 alignItems: 'flex-start',
                 paddingLeft: 20,
               }}>
-              <Title>Aqua</Title>
+              <Title>{Name}</Title>
             </Body>
           </View>
         </View>

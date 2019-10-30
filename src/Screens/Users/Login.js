@@ -29,12 +29,10 @@ const Login = ({navigation}) => {
     const response = await firebaseSDK.login(user, loginSuccess, loginFailed);
   };
 
-  const loginSuccess = () => {
-    const auth = firebase.auth();
+  const loginSuccess = async () => {
+    // await AsyncStorage.setItem('auth-user', 'true');
     ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
-    navigation.replace('Home', {
-      user: auth,
-    });
+    navigation.replace('Home');
   };
 
   const loginFailed = () => {
