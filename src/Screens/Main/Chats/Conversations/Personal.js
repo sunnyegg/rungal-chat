@@ -4,23 +4,14 @@ import {View} from 'react-native';
 import {Container, Body, Title, Icon} from 'native-base';
 import styles from './Styles';
 
-const PersonalConversation = ({navigation}) => {
-  const [Messages, setMessages] = useState([
-    {
-      _id: 1,
-      text: 'Test',
-      createdAt: new Date(),
-      user: {
-        _id: 2,
-        name: 'Aw',
-        avatar: 'https://placeimg.com/140/140/any',
-      },
-    },
-  ]);
+import firebaseSDK from '../../../../Configs/firebaseSDK';
 
-  useEffect(() => {
-    console.log({Messages});
-  }, []);
+const PersonalConversation = ({navigation}) => {
+  const [Messages, setMessages] = useState([]);
+
+  // useEffect(() => {
+  //   console.log({Messages});
+  // }, []);
 
   const onSend = text => {
     setMessages(() => GiftedChat.append(Messages, text));

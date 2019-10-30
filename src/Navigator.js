@@ -20,7 +20,7 @@ const MainNavigator = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: 'Home',
+    initialRouteName: 'Open',
     transitionConfig: () => fromRight(500),
   },
 );

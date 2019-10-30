@@ -1,28 +1,31 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StatusBar} from 'react-native';
 import {
   Container,
-  Header,
-  Content,
   List,
   ListItem,
-  Left,
   Body,
-  Right,
   Thumbnail,
   Text,
-  Button,
   Icon,
   Title,
   Badge,
-  Item,
-  Input,
 } from 'native-base';
 import styles from './Styles';
 import Avatar from '../../../Assets/Img/aqua.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
-import {GiftedChat} from 'react-native-gifted-chat';
+
 const PersonalList = ({navigation}) => {
+  const [User, setUser] = useState('');
+
+  const getUser = () => {
+    setUser(navigation.getParam('user'));
+  };
+
+  useEffect(() => {
+    getUser();
+    console.log(User);
+  });
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
       <StatusBar backgroundColor="#23272a" />

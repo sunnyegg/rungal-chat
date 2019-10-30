@@ -3,7 +3,6 @@ import firebase from 'firebase';
 class FirebaseSDK {
   constructor() {
     if (!firebase.apps.length) {
-      //avoid re-initializing
       firebase.initializeApp({
         apiKey: 'AIzaSyBIN-fVr4Ubr-8aIk2KeIZEBbRL19NYlgI',
         authDomain: 'rungalchat.firebaseapp.com',
@@ -20,37 +19,11 @@ class FirebaseSDK {
       .signInWithEmailAndPassword(user.Email, user.Password)
       .then(success, failed);
   };
-  register = async user => {
+  register = async (user, success_auth, failed_auth) => {
     await firebase
       .auth()
       .createUserWithEmailAndPassword(user.Email, user.Password)
-      .then(
-        function() {
-          console.log(
-            'created user successfully. User email:' +
-              user.Email +
-              ' name:' +
-              user.Name,
-          );
-          const userf = firebase.auth().currentUser;
-          userf.updateProfile({displayName: user.Name}).then(
-            function() {
-              console.log(
-                'Updated displayName successfully. name:' + user.Name,
-              );
-            },
-            function(error) {
-              console.warn('Error update displayName.');
-            },
-          );
-        },
-        function(error) {
-          console.error(
-            'got error:' + typeof error + ' string:' + error.message,
-          );
-          alert('Create account failed. Error: ' + error.message);
-        },
-      );
+      .then(success_auth, failed_auth);
   };
 }
 

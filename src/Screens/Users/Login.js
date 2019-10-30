@@ -17,12 +17,12 @@ import {Item, Input, Header, Button, Text, View, Spinner} from 'native-base';
 import Bg from '../../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
 
+import firebase from 'firebase';
+
 const Height = Dimensions.get('window').height;
 const Login = ({navigation}) => {
-  const [Name, setName] = useState('Test');
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
-  const [Avatar, setAvatar] = useState('');
 
   const submitLogin = async () => {
     const user = {Email, Password};
@@ -30,11 +30,10 @@ const Login = ({navigation}) => {
   };
 
   const loginSuccess = () => {
+    const auth = firebase.auth();
     ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
     navigation.replace('Home', {
-      name: Name,
-      email: Email,
-      avatar: Avatar,
+      user: auth,
     });
   };
 

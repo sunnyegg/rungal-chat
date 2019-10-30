@@ -16,6 +16,7 @@ import {Item, Input, Header, Button, Text, View} from 'native-base';
 import Bg from '../../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
 import firebaseSDK from '../../Configs/firebaseSDK';
+import firebase from 'firebase';
 
 const Height = Dimensions.get('window').height;
 const Register = ({navigation}) => {
@@ -24,15 +25,38 @@ const Register = ({navigation}) => {
   const [Password, setPassword] = useState('');
 
   const register = async () => {
-    try {
-      const user = {Email, Password, Name};
-      const response = await firebaseSDK.register(user);
-      ToastAndroid.show('Register Success!', ToastAndroid.LONG);
-      navigation.replace('Login');
-    } catch ({message}) {
-      ToastAndroid.show('Register Failed!', ToastAndroid.LONG);
-      console.log('create account failed. catch error:' + message);
-    }
+    const user = {Email, Password, Name};
+    const response = await firebaseSDK.register(
+      user,
+      registerSuccess,
+      registerFailed,
+    );
+  };
+
+  const registerSuccess = () => {
+    const user = {Email, Name};
+    const userf = firebase.auth().currentUser;
+    userf.updateProfile({displayName: user.Name});
+
+    const db = firebase.database();
+    db.ref('Users/')
+      .push({
+        name: user.Name,
+        email: user.Email,
+      })
+      .then(result => {
+        console.log(result);
+        ToastAndroid.show('Register Success!', ToastAndroid.LONG);
+        navigation.replace('Login');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const registerFailed = error => {
+    console.log(error);
+    ToastAndroid.show('Register Failed!', ToastAndroid.LONG);
   };
 
   return (
