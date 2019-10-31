@@ -59,11 +59,18 @@ const FriendList = ({navigation}) => {
           </View>
           <View style={{flex: 1}}>
             <Body style={styles.RightTitle}>
-              <Icon
-                name="md-search"
-                style={{color: 'white'}}
-                onPress={() => alert('Apa lo')}
-              />
+              <View style={{flexDirection: 'row'}}>
+                <Icon
+                  name="md-map"
+                  style={{color: 'white', paddingRight: 25}}
+                  onPress={() => alert('Maps')}
+                />
+                <Icon
+                  name="md-search"
+                  style={{color: 'white'}}
+                  onPress={() => alert('Apa lo')}
+                />
+              </View>
             </Body>
           </View>
         </View>
