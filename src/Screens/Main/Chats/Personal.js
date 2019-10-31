@@ -78,6 +78,7 @@ const PersonalList = ({navigation}) => {
                     navigation.navigate('PersonalConversation', {
                       userID: key,
                       userName: ListUsers[key].name,
+                      userEmail: ListUsers[key].email,
                     })
                   }>
                   <Body
