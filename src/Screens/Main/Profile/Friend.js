@@ -1,29 +1,21 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Image} from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Left,
-  Body,
-  Right,
-  Thumbnail,
-  Text,
-  Button,
-  Icon,
-  Title,
-  Badge,
-  Item,
-  Input,
-} from 'native-base';
+import {Container, Body, Text, Icon, Title} from 'native-base';
 import styles from './Styles';
-import Avatar from '../../../Assets/Img/aqua.jpg';
+import Avatar from '../../../Assets/Img/icon.png';
 import {ScrollView} from 'react-native-gesture-handler';
-import {GiftedChat} from 'react-native-gifted-chat';
 
 const ProfileFriend = ({navigation}) => {
+  const [Name, setName] = useState('');
+
+  const getCurrentUser = () => {
+    setName(navigation.getParam('name'));
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+  }, [Name]);
+
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
       <View style={styles.Header}>
@@ -58,7 +50,7 @@ const ProfileFriend = ({navigation}) => {
             </View>
             <View style={{paddingLeft: 25, paddingTop: 20}}>
               <Text style={{color: 'white', fontWeight: 'bold', fontSize: 24}}>
-                Nama
+                {Name}
               </Text>
               <Text style={{color: 'gray', fontSize: 16}}>Online</Text>
             </View>

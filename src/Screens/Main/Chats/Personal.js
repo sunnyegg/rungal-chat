@@ -12,15 +12,20 @@ import {
   Badge,
 } from 'native-base';
 import styles from './Styles';
-import Avatar from '../../../Assets/Img/aqua.jpg';
+import Avatar from '../../../Assets/Img/icon.png';
 import {ScrollView} from 'react-native-gesture-handler';
 
+import moment from 'moment';
 import firebase from 'firebase';
 
 const PersonalList = ({navigation}) => {
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [ListUsers, setListUsers] = useState([]);
+  const [LastMessage, setLastMessage] = useState([]);
+  const [LastTime, setLastTime] = useState([]);
+  const [LastDate, setLastDate] = useState([]);
+  const [Display, setDisplay] = useState([]);
 
   const getCurrentUser = () => {
     const name = firebase.auth().currentUser.displayName;
@@ -32,7 +37,7 @@ const PersonalList = ({navigation}) => {
   const listUsers = () => {
     firebase
       .database()
-      .ref('Users/')
+      .ref('Users')
       .on('value', snapshot => {
         const set = snapshot.val();
         setListUsers(set);
@@ -42,9 +47,31 @@ const PersonalList = ({navigation}) => {
   useEffect(() => {
     getCurrentUser();
     listUsers();
-  }, []);
+    getLastMessage();
+  }, [LastMessage, LastTime, LastDate]);
 
-  let tampungData = [];
+  const getLastMessage = () => {
+    Object.keys(ListUsers)
+      .filter(a => ListUsers[a].name !== Name)
+      .map(key => {
+        setDisplay(ListUsers[key].name);
+      });
+    firebase
+      .database()
+      .ref(
+        'Messages/' + firebase.auth().currentUser.displayName + '/' + Display,
+      )
+      .limitToLast(1)
+      .on('value', snapshot => {
+        snapshot.forEach(child => {
+          const time = new Date(child.val().createdAt);
+          const setData = setLastMessage(child.val().text);
+          setLastTime(moment(time).format('LT'));
+          setLastDate(moment(time).format('ll'));
+        });
+      });
+  };
+
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
       <StatusBar backgroundColor="#23272a" />
@@ -76,7 +103,7 @@ const PersonalList = ({navigation}) => {
                   avatar
                   onPress={() =>
                     navigation.navigate('PersonalConversation', {
-                      userID: key,
+                      // userID: key,
                       userName: ListUsers[key].name,
                       userEmail: ListUsers[key].email,
                     })
@@ -94,57 +121,22 @@ const PersonalList = ({navigation}) => {
                       <Text style={{color: 'white', fontWeight: 'bold'}}>
                         {ListUsers[key].name}
                       </Text>
-                      <Text note>
-                        Doing what you like will always keep you happy . .
+                      <Text note numberOfLines={2}>
+                        {LastMessage}
                       </Text>
                     </View>
-                    <View style={{flex: 1}}>
-                      <Text note>3:43 pm</Text>
-                      <Badge
-                        style={{
-                          marginTop: 10,
-                          marginRight: 5,
-                          backgroundColor: '#7289da',
-                        }}>
-                        <Text>2</Text>
-                      </Badge>
+                    <View style={{flex: 1, paddingTop: 5}}>
+                      <Text note style={{fontSize: 8}}>
+                        {LastDate}
+                      </Text>
+                      <Text note style={{fontSize: 10}}>
+                        {LastTime}
+                      </Text>
                     </View>
                   </Body>
                 </ListItem>
               );
             })}
-
-          {/* <ListItem
-            avatar
-            onPress={() => navigation.navigate('PersonalConversation')}>
-            <Body
-              style={{
-                borderBottomColor: '#4f555c',
-                flex: 1,
-                flexDirection: 'row',
-              }}>
-              <View style={{flex: 1}}>
-                <Thumbnail source={Avatar} />
-              </View>
-              <View style={{flex: 3}}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>Aqua</Text>
-                <Text note>
-                  Doing what you like will always keep you happy . .
-                </Text>
-              </View>
-              <View style={{flex: 1}}>
-                <Text note>3:43 pm</Text>
-                <Badge
-                  style={{
-                    marginTop: 10,
-                    marginRight: 5,
-                    backgroundColor: '#7289da',
-                  }}>
-                  <Text>2</Text>
-                </Badge>
-              </View>
-            </Body>
-          </ListItem> */}
         </List>
       </ScrollView>
     </Container>

@@ -17,13 +17,12 @@ const PersonalConversation = ({navigation}) => {
   const [DisplayName, setDisplayName] = useState('');
   const currentUser = firebaseSDK.uid();
 
-  const setData = () => {
-    setUserID(navigation.getParam('userID'));
-    setDisplayName(navigation.getParam('userName'));
-    // setEmail(navigation.getParam('userEmail'));
+  useEffect(() => {
     setName(firebase.auth().currentUser.displayName);
-    setEmail(firebase.auth().currentUser.email);
-  };
+    setDisplayName(navigation.getParam('userName'));
+    setEmail(navigation.getParam('userName'));
+    getAllMessages();
+  }, []);
 
   const userData = {
     name: Name,
@@ -32,11 +31,17 @@ const PersonalConversation = ({navigation}) => {
     _id: currentUser,
   };
 
-  useEffect(() => {
-    setData();
+  const getAllMessages = () => {
     firebase
       .database()
-      .ref('Messages')
+      .ref(
+        'Messages/' +
+          firebase.auth().currentUser.displayName +
+          '/' +
+          navigation.getParam('userName') +
+          '/',
+      )
+      .limitToLast(20)
       .on('value', snapshot => {
         let data = [];
         snapshot.forEach(child => {
@@ -55,7 +60,28 @@ const PersonalConversation = ({navigation}) => {
         });
         setMessages(data);
       });
-  }, []);
+  };
+
+  const send = async messages => {
+    for (let i = 0; i < messages.length; i++) {
+      const timestamp = firebase.database.ServerValue.TIMESTAMP;
+      const {text, user} = messages[i];
+      const message = {
+        text,
+        user,
+        createdAt: timestamp,
+      };
+      firebase
+        .database()
+        .ref(`Messages/${Name}/${DisplayName}`)
+        .push(message);
+
+      firebase
+        .database()
+        .ref(`Messages/${DisplayName}/${Name}`)
+        .push(message);
+    }
+  };
 
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
@@ -82,7 +108,7 @@ const PersonalConversation = ({navigation}) => {
       </View>
       <GiftedChat
         messages={MessagesChat}
-        onSend={firebaseSDK.send}
+        onSend={send}
         user={userData}
         renderBubble={customBubble}
         renderInputToolbar={customInput}

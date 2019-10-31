@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {
   Container,
@@ -15,11 +15,39 @@ import {
   Icon,
   Title,
 } from 'native-base';
-import Avatar from '../../../Assets/Img/aqua.jpg';
+import Avatar from '../../../Assets/Img/icon.png';
 import {ScrollView} from 'react-native-gesture-handler';
 import styles from './Styles';
 
+import firebase from 'firebase';
+
 const FriendList = ({navigation}) => {
+  const [Name, setName] = useState('');
+  const [Email, setEmail] = useState('');
+  const [ListUsers, setListUsers] = useState([]);
+
+  const getCurrentUser = () => {
+    const name = firebase.auth().currentUser.displayName;
+    const email = firebase.auth().currentUser.email;
+    setName(name);
+    setEmail(email);
+  };
+
+  const listUsers = () => {
+    firebase
+      .database()
+      .ref('Users/')
+      .on('value', snapshot => {
+        const set = snapshot.val();
+        setListUsers(set);
+      });
+  };
+
+  useEffect(() => {
+    listUsers();
+    getCurrentUser();
+  }, []);
+
   return (
     <>
       <View style={styles.Header}>
@@ -42,7 +70,41 @@ const FriendList = ({navigation}) => {
       </View>
       <ScrollView style={{backgroundColor: '#2c2f33', paddingTop: 10}}>
         <List style={{marginLeft: -10}}>
-          <ListItem avatar onPress={() => navigation.navigate('FriendProfile')}>
+          {Object.keys(ListUsers)
+            .filter(a => ListUsers[a].name !== Name)
+            .map((key, index) => {
+              return (
+                <ListItem
+                  avatar
+                  onPress={() =>
+                    navigation.navigate('FriendProfile', {
+                      name: ListUsers[key].name,
+                    })
+                  }>
+                  <Body
+                    style={{
+                      borderBottomColor: '#4f555c',
+                      flex: 1,
+                      flexDirection: 'row',
+                    }}>
+                    <View style={{flex: 1}}>
+                      <Thumbnail source={Avatar} />
+                    </View>
+                    <View style={{flex: 4}}>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontWeight: 'bold',
+                        }}>
+                        {ListUsers[key].name}
+                      </Text>
+                      <Text note>Online</Text>
+                    </View>
+                  </Body>
+                </ListItem>
+              );
+            })}
+          {/* <ListItem avatar onPress={() => navigation.navigate('FriendProfile')}>
             <Body
               style={{
                 borderBottomColor: '#4f555c',
@@ -65,7 +127,7 @@ const FriendList = ({navigation}) => {
                 </Text>
               </View>
             </Body>
-          </ListItem>
+          </ListItem> */}
         </List>
       </ScrollView>
     </>
