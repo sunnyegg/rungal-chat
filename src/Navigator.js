@@ -8,6 +8,7 @@ import Register from './Screens/Users/Register';
 import Home from './Screens/Main/Home';
 import PersonalConversation from './Screens/Main/Chats/Conversations/Personal';
 import FriendProfile from './Screens/Main/Profile/Friend';
+import Location from './Screens/Main/Maps/Location';
 
 const MainNavigator = createStackNavigator(
   {
@@ -17,6 +18,7 @@ const MainNavigator = createStackNavigator(
     Home,
     PersonalConversation,
     FriendProfile,
+    Location,
   },
   {
     headerMode: 'none',

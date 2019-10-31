@@ -63,7 +63,7 @@ const FriendList = ({navigation}) => {
                 <Icon
                   name="md-map"
                   style={{color: 'white', paddingRight: 25}}
-                  onPress={() => alert('Maps')}
+                  onPress={() => navigation.navigate('Location')}
                 />
                 <Icon
                   name="md-search"
