@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
+const Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   Header: {
     height: 65,
@@ -13,18 +14,31 @@ const styles = StyleSheet.create({
   LeftTitle: {
     justifyContent: 'center',
     alignSelf: 'flex-start',
-    marginLeft: 15,
+    marginLeft: 20,
   },
   RightTitle: {
     justifyContent: 'center',
     alignSelf: 'flex-end',
-    marginRight: 15,
+    marginRight: 20,
   },
   Profile: {
     paddingLeft: 20,
     paddingBottom: 20,
     borderBottomWidth: 0.3,
     borderBottomColor: 'gray',
+  },
+  ProfileAccount: {
+    width: Width - 50,
+    padding: 20,
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderBottomWidth: 0.3,
+    borderBottomColor: 'gray',
+  },
+  ProfileImage: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 100,
   },
 });
 

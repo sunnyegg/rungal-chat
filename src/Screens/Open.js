@@ -1,12 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
-import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  ToastAndroid,
-  AsyncStorage,
-} from 'react-native';
+import {StyleSheet, ImageBackground, Dimensions} from 'react-native';
 
 import {Header, Button, Text, View, Content} from 'native-base';
 
@@ -15,24 +9,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const Height = Dimensions.get('window').height;
 const Open = ({navigation}) => {
-  // const checkAuth = async () => {
-  //   const auth = await AsyncStorage.getItem('auth-user');
-  //   const check = auth === 'true' ? successAuth() : failedAuth();
-  // };
-
-  // const successAuth = () => {
-  //   ToastAndroid.show('You are already logged in!', ToastAndroid.SHORT);
-  //   navigation.replace('Home');
-  // };
-
-  // const failedAuth = () => {
-  //   ToastAndroid.show('Please Login First!', ToastAndroid.SHORT);
-  // };
-
-  // useEffect(() => {
-  //   checkAuth();
-  // }, []);
-
   return (
     <View>
       <Header androidStatusBarColor={'#23272a'} style={styles.HeaderStyle} />

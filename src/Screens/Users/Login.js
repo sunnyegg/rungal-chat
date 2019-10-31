@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import firebaseSDK from '../../Configs/firebaseSDK';
 
 import {
   StyleSheet,
   Image,
-  AsyncStorage,
   ToastAndroid,
   ImageBackground,
   Dimensions,
@@ -29,8 +28,7 @@ const Login = ({navigation}) => {
     const response = await firebaseSDK.login(user, loginSuccess, loginFailed);
   };
 
-  const loginSuccess = async () => {
-    // await AsyncStorage.setItem('auth-user', 'true');
+  const loginSuccess = () => {
     ToastAndroid.show('Login Success!', ToastAndroid.SHORT);
     navigation.replace('Home');
   };

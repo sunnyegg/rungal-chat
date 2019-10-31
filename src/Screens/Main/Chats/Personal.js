@@ -44,11 +44,24 @@ const PersonalList = ({navigation}) => {
       });
   };
 
+  // const listUsers = () => {
+  //   firebase
+  //     .database()
+  //     .ref('Messages')
+  //     .on('value', snapshot => {
+  //       // const set = snapshot.val();
+  //       // setListUsers(set);
+  //       snapshot.forEach(child => {
+  //         console.log(child.key);
+  //       });
+  //     });
+  // };
+
   useEffect(() => {
     getCurrentUser();
     listUsers();
-    getLastMessage();
-  }, [LastMessage, LastTime, LastDate]);
+    // getLastMessage();
+  }, []);
 
   const getLastMessage = () => {
     Object.keys(ListUsers)
@@ -65,7 +78,7 @@ const PersonalList = ({navigation}) => {
       .on('value', snapshot => {
         snapshot.forEach(child => {
           const time = new Date(child.val().createdAt);
-          const setData = setLastMessage(child.val().text);
+          setLastMessage(child.val().text);
           setLastTime(moment(time).format('LT'));
           setLastDate(moment(time).format('ll'));
         });
@@ -122,15 +135,18 @@ const PersonalList = ({navigation}) => {
                         {ListUsers[key].name}
                       </Text>
                       <Text note numberOfLines={2}>
-                        {LastMessage}
+                        {/* {LastMessage} */}
+                        {/* Ini belom dil */}
                       </Text>
                     </View>
                     <View style={{flex: 1, paddingTop: 5}}>
                       <Text note style={{fontSize: 8}}>
-                        {LastDate}
+                        {/* {LastDate} */}
+                        {/* Ini juga */}
                       </Text>
                       <Text note style={{fontSize: 10}}>
-                        {LastTime}
+                        {/* {LastTime} */}
+                        {/* Ini juga */}
                       </Text>
                     </View>
                   </Body>
