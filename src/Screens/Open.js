@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {StyleSheet, ImageBackground, Dimensions} from 'react-native';
 
@@ -6,9 +6,28 @@ import {Header, Button, Text, View, Content} from 'native-base';
 
 import Bg from '../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
+import Geolocation from '@react-native-community/geolocation';
 
 const Height = Dimensions.get('window').height;
 const Open = ({navigation}) => {
+  const [Latitude, setLatitude] = useState(null);
+  const [Longitude, setLongitude] = useState(null);
+
+  useEffect(() => {
+    getLocation();
+  }, [Latitude, Longitude]);
+
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      },
+      error => console.log(error),
+      {enableHighAccuracy: false, timeout: 20000},
+    );
+  };
+
   return (
     <View>
       <Header androidStatusBarColor={'#23272a'} style={styles.HeaderStyle} />
@@ -57,7 +76,12 @@ const Open = ({navigation}) => {
               </Button>
               <Button
                 style={styles.ButtonRegister}
-                onPress={() => navigation.navigate('Register')}>
+                onPress={() =>
+                  navigation.navigate('Register', {
+                    latitude: Latitude,
+                    longitude: Longitude,
+                  })
+                }>
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>Register</Text>
               </Button>
             </View>

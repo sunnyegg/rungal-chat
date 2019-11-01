@@ -2,13 +2,9 @@ import React, {useState, useEffect} from 'react';
 
 import {
   StyleSheet,
-  Image,
-  AsyncStorage,
   ToastAndroid,
   ImageBackground,
   Dimensions,
-  Label,
-  Form,
 } from 'react-native';
 
 import {Item, Input, Header, Button, Text, View} from 'native-base';
@@ -17,12 +13,17 @@ import Bg from '../../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
 import firebaseSDK from '../../Configs/firebaseSDK';
 import firebase from 'firebase';
+import Geolocation from '@react-native-community/geolocation';
 
 const Height = Dimensions.get('window').height;
 const Register = ({navigation}) => {
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
+
+  useEffect(() => {
+    console.log(navigation.getParam('latitude'));
+  }, []);
 
   const register = async () => {
     const user = {Email, Password, Name};
@@ -39,10 +40,13 @@ const Register = ({navigation}) => {
     userf.updateProfile({displayName: user.Name});
 
     const db = firebase.database();
-    db.ref('Users/')
-      .push({
+    db.ref(`Users/${userf.uid}`)
+      .set({
         name: user.Name,
         email: user.Email,
+        latitude: navigation.getParam('latitude'),
+        longitude: navigation.getParam('longitude'),
+        avatar: '',
       })
       .then(result => {
         console.log(result);

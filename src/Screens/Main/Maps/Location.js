@@ -3,27 +3,52 @@ import {View, Image, StatusBar, Dimensions} from 'react-native';
 import {Container, Body, Text, Icon, Title} from 'native-base';
 import styles from './Styles';
 
+import Geolocation from '@react-native-community/geolocation';
 import MapView from 'react-native-maps';
+import firebase from 'firebase';
 
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 const Location = ({navigation}) => {
-  const [Name, setName] = useState('');
+  const [DataUsers, setDataUsers] = useState([]);
+  const [Latitude, setLatitude] = useState(0);
+  const [Longitude, setLongitude] = useState(0);
 
-  // const [Latitude, setLatitude] = useState(LATITUDE);
-  // const [Longitude, setLongitude] = useState(LONGITUDE);
-  // const [RouteCoordinates, setRouteCoordinates] = useState([]);
-  // const [DistanceTravelled, setDistanceTravelled] = useState(0);
-  // const [PrevLatLng, setPrevLatLng] = useState({});
-  // const [Coordinate, setCoordinate] = useState(
-  //   new AnimatedRegion({
-  //     latitude: LATITUDE,
-  //     longitude: LONGITUDE,
-  //   }),
-  // );
+  useEffect(() => {
+    getAllUsers();
+    getCurrentLocation();
+  }, [Latitude, Longitude]);
 
-  // useEffect(() => {
-  // }, []);
+  const getCurrentLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      },
+      error => console.log(error),
+      {enableHighAccuracy: false, timeout: 20000},
+    );
+  };
+
+  const getAllUsers = () => {
+    firebase
+      .database()
+      .ref('Users')
+      .on('value', snapshot => {
+        let data = [];
+        snapshot.forEach(child => {
+          data = [
+            {
+              name: child.val().name,
+              latitude: child.val().latitude,
+              longitude: child.val().longitude,
+            },
+            ...data,
+          ];
+        });
+        setDataUsers(data);
+      });
+  };
 
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
@@ -52,19 +77,24 @@ const Location = ({navigation}) => {
       <MapView
         style={{flex: 1, width: Width, height: Height}}
         region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: Latitude,
+          longitude: Longitude,
+          latitudeDelta: 1,
+          longitudeDelta: 1,
         }}>
-        <MapView.Marker
-          coordinate={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-          }}
-          title="Lokasi"
-          description="Hello"
-        />
+        {DataUsers.map(item => {
+          return (
+            <MapView.Marker
+              style={{flex: 1, width: Width, height: Height}}
+              coordinate={{
+                latitude: item.latitude,
+                longitude: item.longitude,
+              }}
+              title={item.name}
+              description="I am here"
+            />
+          );
+        })}
       </MapView>
     </Container>
   );

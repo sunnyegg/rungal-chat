@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {GiftedChat, Bubble, InputToolbar} from 'react-native-gifted-chat';
 import {View, Dimensions} from 'react-native';
-import {Container, Body, Title, Icon} from 'native-base';
+import {Container, Body, Title, Icon, Button} from 'native-base';
 import styles from './Styles';
 
 import firebaseSDK from '../../../../Configs/firebaseSDK';
@@ -11,7 +11,6 @@ const Width = Dimensions.get('window').width;
 
 const PersonalConversation = ({navigation}) => {
   const [MessagesChat, setMessages] = useState([]);
-  const [UserID, setUserID] = useState('');
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [DisplayName, setDisplayName] = useState('');
@@ -35,13 +34,10 @@ const PersonalConversation = ({navigation}) => {
     firebase
       .database()
       .ref(
-        'Messages/' +
-          firebase.auth().currentUser.displayName +
-          '/' +
-          navigation.getParam('userName') +
-          '/',
+        `Messages/${
+          firebase.auth().currentUser.displayName
+        }/${navigation.getParam('userName')}/Chats`,
       )
-      .limitToLast(20)
       .on('value', snapshot => {
         let data = [];
         snapshot.forEach(child => {
@@ -73,12 +69,12 @@ const PersonalConversation = ({navigation}) => {
       };
       firebase
         .database()
-        .ref(`Messages/${Name}/${DisplayName}`)
+        .ref(`Messages/${Name}/${DisplayName}/Chats`)
         .push(message);
 
       firebase
         .database()
-        .ref(`Messages/${DisplayName}/${Name}`)
+        .ref(`Messages/${DisplayName}/${Name}/Chats`)
         .push(message);
     }
   };
@@ -101,7 +97,19 @@ const PersonalConversation = ({navigation}) => {
                 alignItems: 'flex-start',
                 paddingLeft: 20,
               }}>
-              <Title>{DisplayName}</Title>
+              <Button
+                onPress={() =>
+                  navigation.navigate('FriendProfile', {
+                    name: DisplayName,
+                  })
+                }
+                style={{
+                  width: '100%',
+                  backgroundColor: '#23272a',
+                  elevation: 0,
+                }}>
+                <Title>{DisplayName}</Title>
+              </Button>
             </Body>
           </View>
         </View>

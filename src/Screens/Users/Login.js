@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import firebaseSDK from '../../Configs/firebaseSDK';
 
 import {
@@ -22,6 +22,10 @@ const Height = Dimensions.get('window').height;
 const Login = ({navigation}) => {
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
+
+  useEffect(() => {
+    console.log(navigation.getParam('latitude'));
+  }, []);
 
   const submitLogin = async () => {
     const user = {Email, Password};
