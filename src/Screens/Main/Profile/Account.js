@@ -174,7 +174,16 @@ const Account = ({navigation}) => {
       <ScrollView style={{backgroundColor: '#2c2f33', paddingTop: 20}}>
         <View style={styles.ProfileAccount}>
           <View>
-            <Image source={Img} style={styles.ProfileImage} />
+            {Avatar === '' ? (
+              <Thumbnail style={styles.ProfileImage} source={Img} />
+            ) : (
+              <Thumbnail
+                style={styles.ProfileImage}
+                source={{
+                  uri: Avatar,
+                }}
+              />
+            )}
             <Text
               style={{
                 color: 'white',
@@ -192,21 +201,13 @@ const Account = ({navigation}) => {
             <View style={{paddingVertical: 5}}>
               <Button
                 style={{
+                  justifyContent: 'center',
                   backgroundColor: '#2c2f33',
                   paddingVertical: 10,
                   elevation: 0,
                   height: 60,
-                }}>
-                <Text>Edit Display Name</Text>
-              </Button>
-            </View>
-            <View style={{paddingVertical: 5}}>
-              <Button
-                style={{
-                  backgroundColor: '#2c2f33',
-                  paddingVertical: 10,
-                  elevation: 0,
-                  height: 60,
+                  borderWidth: 0.5,
+                  borderColor: 'gray',
                 }}
                 onPress={() => UploadImage()}>
                 <Text>Edit Profile Picture</Text>

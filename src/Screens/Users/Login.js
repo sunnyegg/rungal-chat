@@ -1,14 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import firebaseSDK from '../../Configs/firebaseSDK';
 
 import {
   StyleSheet,
-  Image,
   ToastAndroid,
   ImageBackground,
   Dimensions,
-  Label,
-  Form,
 } from 'react-native';
 
 import {Item, Input, Header, Button, Text, View, Spinner} from 'native-base';
@@ -16,16 +13,10 @@ import {Item, Input, Header, Button, Text, View, Spinner} from 'native-base';
 import Bg from '../../Assets/Img/bg.jpg';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import firebase from 'firebase';
-
 const Height = Dimensions.get('window').height;
 const Login = ({navigation}) => {
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
-
-  useEffect(() => {
-    console.log(navigation.getParam('latitude'));
-  }, []);
 
   const submitLogin = async () => {
     const user = {Email, Password};

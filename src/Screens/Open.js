@@ -24,7 +24,7 @@ const Open = ({navigation}) => {
         setLongitude(position.coords.longitude);
       },
       error => console.log(error),
-      {enableHighAccuracy: false, timeout: 20000},
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 10000},
     );
   };
 

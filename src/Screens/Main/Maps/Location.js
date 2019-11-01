@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, StatusBar, Dimensions} from 'react-native';
-import {Container, Body, Text, Icon, Title} from 'native-base';
+import {View, StatusBar, Dimensions} from 'react-native';
+import {Container, Body, Icon, Title} from 'native-base';
 import styles from './Styles';
 
 import Geolocation from '@react-native-community/geolocation';
@@ -13,6 +13,7 @@ const Location = ({navigation}) => {
   const [DataUsers, setDataUsers] = useState([]);
   const [Latitude, setLatitude] = useState(0);
   const [Longitude, setLongitude] = useState(0);
+  const uid = firebase.auth().currentUser.uid;
 
   useEffect(() => {
     getAllUsers();
@@ -22,11 +23,19 @@ const Location = ({navigation}) => {
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
+        console.log(position);
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
+        firebase
+          .database()
+          .ref(`Users/${uid}`)
+          .update({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
       },
       error => console.log(error),
-      {enableHighAccuracy: false, timeout: 20000},
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 10000},
     );
   };
 

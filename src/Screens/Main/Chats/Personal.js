@@ -12,7 +12,7 @@ import {
   Badge,
 } from 'native-base';
 import styles from './Styles';
-import Avatar from '../../../Assets/Img/icon.png';
+import Img from '../../../Assets/Img/icon.png';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import moment from 'moment';
@@ -22,10 +22,10 @@ const PersonalList = ({navigation}) => {
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [ListUsers, setListUsers] = useState([]);
+  const [ListUsers2, setListUsers2] = useState([{}]);
   const [LastMessage, setLastMessage] = useState([]);
   const [LastTime, setLastTime] = useState([]);
   const [LastDate, setLastDate] = useState([]);
-  const [Display, setDisplay] = useState([]);
 
   const getCurrentUser = () => {
     const name = firebase.auth().currentUser.displayName;
@@ -44,46 +44,10 @@ const PersonalList = ({navigation}) => {
       });
   };
 
-  // const listUsers = () => {
-  //   firebase
-  //     .database()
-  //     .ref('Messages')
-  //     .on('value', snapshot => {
-  //       // const set = snapshot.val();
-  //       // setListUsers(set);
-  //       snapshot.forEach(child => {
-  //         console.log(child.key);
-  //       });
-  //     });
-  // };
-
   useEffect(() => {
     getCurrentUser();
     listUsers();
-    // getLastMessage();
   }, []);
-
-  const getLastMessage = () => {
-    Object.keys(ListUsers)
-      .filter(a => ListUsers[a].name !== Name)
-      .map(key => {
-        setDisplay(ListUsers[key].name);
-      });
-    firebase
-      .database()
-      .ref(
-        'Messages/' + firebase.auth().currentUser.displayName + '/' + Display,
-      )
-      .limitToLast(1)
-      .on('value', snapshot => {
-        snapshot.forEach(child => {
-          const time = new Date(child.val().createdAt);
-          setLastMessage(child.val().text);
-          setLastTime(moment(time).format('LT'));
-          setLastDate(moment(time).format('ll'));
-        });
-      });
-  };
 
   return (
     <Container style={{backgroundColor: '#2c2f33'}}>
@@ -116,9 +80,10 @@ const PersonalList = ({navigation}) => {
                   avatar
                   onPress={() =>
                     navigation.navigate('PersonalConversation', {
-                      // userID: key,
+                      userID: key,
                       userName: ListUsers[key].name,
                       userEmail: ListUsers[key].email,
+                      avatar: ListUsers[key].avatar,
                     })
                   }>
                   <Body
@@ -128,25 +93,18 @@ const PersonalList = ({navigation}) => {
                       flexDirection: 'row',
                     }}>
                     <View style={{flex: 1}}>
-                      <Thumbnail source={Avatar} />
+                      {ListUsers[key].avatar === '' ? (
+                        <Thumbnail source={Img} />
+                      ) : (
+                        <Thumbnail source={{uri: ListUsers[key].avatar}} />
+                      )}
                     </View>
-                    <View style={{flex: 3}}>
+                    <View style={{flex: 4}}>
                       <Text style={{color: 'white', fontWeight: 'bold'}}>
                         {ListUsers[key].name}
                       </Text>
                       <Text note numberOfLines={2}>
-                        {/* {LastMessage} */}
-                        {/* Ini belom dil */}
-                      </Text>
-                    </View>
-                    <View style={{flex: 1, paddingTop: 5}}>
-                      <Text note style={{fontSize: 8}}>
-                        {/* {LastDate} */}
-                        {/* Ini juga */}
-                      </Text>
-                      <Text note style={{fontSize: 10}}>
-                        {/* {LastTime} */}
-                        {/* Ini juga */}
+                        {ListUsers[key].email}
                       </Text>
                     </View>
                   </Body>

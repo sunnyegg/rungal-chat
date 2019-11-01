@@ -15,7 +15,7 @@ import {
   Icon,
   Title,
 } from 'native-base';
-import Avatar from '../../../Assets/Img/icon.png';
+import Img from '../../../Assets/Img/icon.png';
 import {ScrollView} from 'react-native-gesture-handler';
 import styles from './Styles';
 
@@ -85,7 +85,10 @@ const FriendList = ({navigation}) => {
                   avatar
                   onPress={() =>
                     navigation.navigate('FriendProfile', {
+                      userID: key,
                       name: ListUsers[key].name,
+                      email: ListUsers[key].email,
+                      avatar: ListUsers[key].avatar,
                     })
                   }>
                   <Body
@@ -95,7 +98,11 @@ const FriendList = ({navigation}) => {
                       flexDirection: 'row',
                     }}>
                     <View style={{flex: 1}}>
-                      <Thumbnail source={Avatar} />
+                      {ListUsers[key].avatar === '' ? (
+                        <Thumbnail source={Img} />
+                      ) : (
+                        <Thumbnail source={{uri: ListUsers[key].avatar}} />
+                      )}
                     </View>
                     <View style={{flex: 4}}>
                       <Text

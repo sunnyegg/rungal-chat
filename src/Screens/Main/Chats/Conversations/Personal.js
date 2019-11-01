@@ -12,20 +12,20 @@ const Width = Dimensions.get('window').width;
 const PersonalConversation = ({navigation}) => {
   const [MessagesChat, setMessages] = useState([]);
   const [Name, setName] = useState('');
-  const [Email, setEmail] = useState('');
+  const [Avatar, setAvatar] = useState('');
   const [DisplayName, setDisplayName] = useState('');
   const currentUser = firebaseSDK.uid();
 
   useEffect(() => {
     setName(firebase.auth().currentUser.displayName);
     setDisplayName(navigation.getParam('userName'));
-    setEmail(navigation.getParam('userName'));
+    setAvatar(navigation.getParam('avatar'));
     getAllMessages();
   }, []);
 
   const userData = {
     name: Name,
-    email: Email,
+    avatar: Avatar,
     id: currentUser,
     _id: currentUser,
   };
@@ -34,9 +34,9 @@ const PersonalConversation = ({navigation}) => {
     firebase
       .database()
       .ref(
-        `Messages/${
-          firebase.auth().currentUser.displayName
-        }/${navigation.getParam('userName')}/Chats`,
+        `Messages/${firebase.auth().currentUser.uid}/${navigation.getParam(
+          'userID',
+        )}`,
       )
       .on('value', snapshot => {
         let data = [];
@@ -61,20 +61,21 @@ const PersonalConversation = ({navigation}) => {
   const send = async messages => {
     for (let i = 0; i < messages.length; i++) {
       const timestamp = firebase.database.ServerValue.TIMESTAMP;
-      const {text, user} = messages[i];
+      const {text, user, _id} = messages[i];
       const message = {
+        _id,
         text,
         user,
         createdAt: timestamp,
       };
       firebase
         .database()
-        .ref(`Messages/${Name}/${DisplayName}/Chats`)
+        .ref(`Messages/${currentUser}/${navigation.getParam('userID')}`)
         .push(message);
 
       firebase
         .database()
-        .ref(`Messages/${DisplayName}/${Name}/Chats`)
+        .ref(`Messages/${navigation.getParam('userID')}/${currentUser}`)
         .push(message);
     }
   };
@@ -101,6 +102,7 @@ const PersonalConversation = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('FriendProfile', {
                     name: DisplayName,
+                    avatar: Avatar,
                   })
                 }
                 style={{
@@ -115,6 +117,7 @@ const PersonalConversation = ({navigation}) => {
         </View>
       </View>
       <GiftedChat
+        renderAvatar={null}
         messages={MessagesChat}
         onSend={send}
         user={userData}
