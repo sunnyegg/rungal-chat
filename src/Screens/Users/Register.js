@@ -21,10 +21,6 @@ const Register = ({navigation}) => {
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
 
-  useEffect(() => {
-    console.log(navigation.getParam('latitude'));
-  }, []);
-
   const register = async () => {
     const user = {Email, Password, Name};
     const response = await firebaseSDK.register(
@@ -115,6 +111,7 @@ const Register = ({navigation}) => {
                     style={{color: 'white'}}
                     placeholder="Email"
                     placeholderTextColor="white"
+                    keyboardType="email-address"
                     onChangeText={text => setEmail(text)}
                     value={Email}
                   />

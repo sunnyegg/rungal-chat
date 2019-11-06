@@ -51,10 +51,17 @@ const ProfileFriend = ({navigation}) => {
         <View style={styles.Profile}>
           <View style={{flexDirection: 'row'}}>
             <View>
-              <Thumbnail
-                style={{width: 100, height: 100, borderRadius: 100}}
-                source={{uri: navigation.getParam('avatar')}}
-              />
+              {navigation.getParam('avatar') === '' ? (
+                <Thumbnail
+                  style={{width: 100, height: 100, borderRadius: 100}}
+                  source={Avatar}
+                />
+              ) : (
+                <Thumbnail
+                  style={{width: 100, height: 100, borderRadius: 100}}
+                  source={{uri: navigation.getParam('avatar')}}
+                />
+              )}
             </View>
             <View style={{paddingLeft: 25, paddingTop: 20}}>
               <Text style={{color: 'white', fontWeight: 'bold', fontSize: 24}}>

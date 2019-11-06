@@ -84,6 +84,7 @@ const Login = ({navigation}) => {
                     style={{color: 'white'}}
                     placeholder="Email"
                     placeholderTextColor="white"
+                    keyboardType="email-address"
                     onChangeText={text => setEmail(text)}
                     value={Email}
                   />

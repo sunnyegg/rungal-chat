@@ -1,6 +1,11 @@
 import React, {useState, useEffect} from 'react';
 
-import {StyleSheet, ImageBackground, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+  ToastAndroid,
+} from 'react-native';
 
 import {Header, Button, Text, View, Content} from 'native-base';
 
@@ -10,8 +15,8 @@ import Geolocation from '@react-native-community/geolocation';
 
 const Height = Dimensions.get('window').height;
 const Open = ({navigation}) => {
-  const [Latitude, setLatitude] = useState(null);
-  const [Longitude, setLongitude] = useState(null);
+  const [Latitude, setLatitude] = useState(0);
+  const [Longitude, setLongitude] = useState(0);
 
   useEffect(() => {
     getLocation();
@@ -23,8 +28,9 @@ const Open = ({navigation}) => {
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
       },
-      error => console.log(error),
-      {enableHighAccuracy: false, timeout: 20000, maximumAge: 10000},
+      () =>
+        ToastAndroid.show('Could not get your location.', ToastAndroid.LONG),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 10000},
     );
   };
 

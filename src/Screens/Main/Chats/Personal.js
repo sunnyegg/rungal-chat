@@ -64,7 +64,7 @@ const PersonalList = ({navigation}) => {
               <Icon
                 name="md-search"
                 style={{color: 'white'}}
-                onPress={() => alert('Apa lo')}
+                onPress={() => alert('Belum')}
               />
             </Body>
           </View>
