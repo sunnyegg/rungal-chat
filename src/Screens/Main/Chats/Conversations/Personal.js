@@ -30,14 +30,14 @@ const PersonalConversation = ({navigation}) => {
     _id: currentUser,
   };
 
+  const getMessageRef = `Messages/${
+    firebase.auth().currentUser.uid
+  }/${navigation.getParam('userID')}`;
+
   const getAllMessages = () => {
     firebase
       .database()
-      .ref(
-        `Messages/${firebase.auth().currentUser.uid}/${navigation.getParam(
-          'userID',
-        )}`,
-      )
+      .ref(getMessageRef)
       .on('value', snapshot => {
         let data = [];
         snapshot.forEach(child => {
